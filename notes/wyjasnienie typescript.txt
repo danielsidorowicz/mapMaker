@@ -1,0 +1,19 @@
+let wiek = prompt("wpisz wiek") ?? ""; // 10
+let wynik: number;
+wynik = parseInt(wiek) + 20; //1020
+let el = <HTMLDivElement>document.getElementById("lol")
+el.innerHTML = "dsdsd"
+
+class Klasa {
+    c?: number[][];
+    a: string[]; // private #, public, protected, static, readonly
+    constructor(a: string[], private b: number) {
+        this.a = a
+    }
+    jazda(a: number): number[][] {
+        return [[]]
+        this.c=[[1]]
+    }
+}
+
+console.log("BBB")
