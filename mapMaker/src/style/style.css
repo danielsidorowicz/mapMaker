@@ -5,19 +5,23 @@
 }
 
 body {
-    width: 100vw;
+    /* width: 100vw; */
     height: 100vh;
     background-color: #2e2c2c;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .app {
-    width: 100%;
+    width: fit-content;
     height: 100%;
     padding: 20px;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
-    overflow-x: hidden;
+    justify-content: space-between;
+    gap: 20px;
+    /* overflow-x: hidden; */
 }
 
 .mapOptWithLabel {
@@ -44,11 +48,19 @@ body {
 
 .mapMaker {
     display: grid;
-    grid-template-columns: repeat(32, 1fr);
-    grid-template-rows: repeat(32, 1fr);
+    grid-template-columns: repeat(48, 1fr);
+    grid-template-rows: repeat(48, 1fr);
     grid-column-gap: 2px;
     grid-row-gap: 2px;
     height: fit-content;
+}
+
+.mapWithAutomat {
+    display: flex;
+    flex-direction: row;
+    color: white;
+    gap: 10px;
+    align-items: center;
 }
 
 h1 {

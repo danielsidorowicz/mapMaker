@@ -1,3 +1,5 @@
+import { currentlySelectedCanvas } from "./data";
+
 export default class Options {
     constructor() {
         const mapOptions = <HTMLElement>document.querySelector("#mapOptions")
@@ -7,6 +9,7 @@ export default class Options {
                 const canvas = <HTMLCanvasElement>document.createElement("canvas")
                 canvas.width = 16;
                 canvas.height = 16;
+                this.canvasClick(canvas)
 
                 mapOptions.append(canvas)
 
@@ -16,10 +19,19 @@ export default class Options {
                 img.onload = function () {
                     ctx!.drawImage(img, 16 * j, 16 * i, 16, 16, 0, 0, 16, 16);
                 }
-
-
             }
         }
 
+    }
+
+    canvasClick(canvasElement: HTMLCanvasElement) {
+        canvasElement.addEventListener("click", function (e) {
+            for (let i = 0; i < currentlySelectedCanvas.length; i++) {
+                let chosenCanvas = e.target as HTMLCanvasElement
+                let ctx = currentlySelectedCanvas[i].getContext("2d")
+                ctx?.drawImage(chosenCanvas, 0, 0)
+
+            }
+        })
     }
 }
