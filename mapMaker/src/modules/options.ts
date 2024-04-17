@@ -1,4 +1,4 @@
-import { currentlySelectedCanvas } from "./data";
+import { currentlySelectedCanvas, clearSelected } from "./data";
 
 export default class Options {
     constructor() {
@@ -30,7 +30,21 @@ export default class Options {
                 let chosenCanvas = e.target as HTMLCanvasElement
                 let ctx = currentlySelectedCanvas[i].getContext("2d")
                 ctx?.drawImage(chosenCanvas, 0, 0)
+            }
 
+
+            let automat = document.getElementById("automat") as HTMLInputElement
+
+
+
+            // DO NAPRAWIENIA
+            if (automat.checked) {
+                currentlySelectedCanvas.sort(function (a, b) { return (a.position > b.position) ? 1 : ((b.position > a.position) ? -1 : 0); });
+
+                console.log(currentlySelectedCanvas);
+
+            } else {
+                clearSelected()
             }
         })
     }

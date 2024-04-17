@@ -79,7 +79,7 @@ div[class='mapOptions']>canvas:hover {
 
 div[class='mapMaker']>canvas {
     display: block;
-    border: 1px dashed white;
+    border: 1px solid white;
 }
 
 div[class='mapMaker']>canvas:hover {

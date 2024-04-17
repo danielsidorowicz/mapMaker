@@ -1,4 +1,5 @@
 import { currentlySelectedCanvas, clearSelected } from "./data";
+import { MapMakerCanvas } from "./interfaces";
 
 export default class Map {
     constructor() {
@@ -6,7 +7,7 @@ export default class Map {
         let m = 0
         for (let i = 0; i < 48; i++) {
             for (let j = 0; j < 48; j++) {
-                const canvas = <HTMLCanvasElement>document.createElement("canvas")
+                const canvas = <MapMakerCanvas>document.createElement("canvas")
                 canvas.width = 16;
                 canvas.height = 16;
                 canvas.setAttribute('position', m.toString())
@@ -18,13 +19,27 @@ export default class Map {
         }
     }
 
-    canvasClick(canvasElement: HTMLCanvasElement) {
+    canvasClick(canvasElement: MapMakerCanvas) {
         canvasElement.addEventListener("click", function (e) {
-            clearSelected()
+            if (e.ctrlKey || e.metaKey) {
 
-            console.log(e.target);
+            } else {
+                clearSelected()
+            }
+            let canvas = e.target as MapMakerCanvas
 
-            currentlySelectedCanvas.push(e.target as HTMLCanvasElement)
+            canvas.style.backgroundColor = "gray"
+
+            if (currentlySelectedCanvas.includes(canvas)) {
+                const index = currentlySelectedCanvas.indexOf(canvas);
+                currentlySelectedCanvas.splice(index, 1);
+
+                canvas.style.backgroundColor = ""
+            } else {
+                currentlySelectedCanvas.push(canvas)
+            }
+
+
             console.log(currentlySelectedCanvas);
 
         })
