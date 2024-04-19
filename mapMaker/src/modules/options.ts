@@ -1,4 +1,5 @@
 import { currentlySelectedCanvas, clearSelected } from "./data";
+import { MapMakerCanvas } from "./interfaces";
 
 export default class Options {
     constructor() {
@@ -39,9 +40,27 @@ export default class Options {
 
             // DO NAPRAWIENIA
             if (automat.checked) {
-                currentlySelectedCanvas.sort(function (a, b) { return (a.position > b.position) ? 1 : ((b.position > a.position) ? -1 : 0); });
+                currentlySelectedCanvas.sort((a, b) => +b.getAttribute("position")! - +a.getAttribute("position")!);
 
-                console.log(currentlySelectedCanvas);
+                let useInAutomat = currentlySelectedCanvas[0]
+
+                let nextPosition = +useInAutomat.getAttribute("position")! + 1
+
+                let MapMakerCanvases = Array.from(document.querySelectorAll('#canvasID'));
+                console.log(MapMakerCanvases);
+
+
+                let automatCanvas = MapMakerCanvases?.find((canvas) => +canvas.getAttribute("position")! == nextPosition);
+
+                console.log(automatCanvas);
+
+
+                clearSelected()
+
+                // currentlySelectedCanvas.push(automatCanvas)
+
+
+
 
             } else {
                 clearSelected()

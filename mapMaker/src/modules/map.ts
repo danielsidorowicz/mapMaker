@@ -10,6 +10,7 @@ export default class Map {
                 const canvas = <MapMakerCanvas>document.createElement("canvas")
                 canvas.width = 16;
                 canvas.height = 16;
+                canvas.id = "canvasID"
                 canvas.setAttribute('position', m.toString())
                 this.canvasClick(canvas)
 
