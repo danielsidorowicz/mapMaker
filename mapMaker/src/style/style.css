@@ -13,6 +13,10 @@ body {
     justify-content: center;
 }
 
+div {
+    user-select: none;
+}
+
 .app {
     width: fit-content;
     height: 100%;
@@ -84,4 +88,11 @@ div[class='mapMaker']>canvas {
 
 div[class='mapMaker']>canvas:hover {
     background-color: white;
+}
+
+.selectBoxDiv {
+    opacity: 50%;
+    background-color: lightblue;
+    position: absolute;
+    pointer-events: none;
 }

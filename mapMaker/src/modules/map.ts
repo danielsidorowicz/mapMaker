@@ -1,9 +1,10 @@
 import { currentlySelectedCanvas, clearSelected } from "./data";
 import { MapMakerCanvas } from "./interfaces";
+import MouseHold from "./mouseHold";
 
 export default class Map {
     constructor() {
-        const mapMaker = <HTMLElement>document.querySelector("#mapMaker")
+        const mapMaker = <HTMLDivElement>document.querySelector("#mapMaker")
         let m = 0
         for (let i = 0; i < 48; i++) {
             for (let j = 0; j < 48; j++) {
@@ -18,9 +19,11 @@ export default class Map {
                 m += 1
             }
         }
+
+        new MouseHold(mapMaker)
     }
 
-    canvasClick(canvasElement: MapMakerCanvas) {
+    private canvasClick(canvasElement: MapMakerCanvas) {
         canvasElement.addEventListener("click", function (e) {
             if (e.ctrlKey || e.metaKey) {
 

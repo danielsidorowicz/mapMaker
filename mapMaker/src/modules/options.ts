@@ -25,7 +25,7 @@ export default class Options {
 
     }
 
-    canvasClick(canvasElement: HTMLCanvasElement) {
+    private canvasClick(canvasElement: HTMLCanvasElement) {
         canvasElement.addEventListener("click", function (e) {
             for (let i = 0; i < currentlySelectedCanvas.length; i++) {
                 let chosenCanvas = e.target as HTMLCanvasElement
@@ -36,34 +36,22 @@ export default class Options {
 
             let automat = document.getElementById("automat") as HTMLInputElement
 
+            if (currentlySelectedCanvas.length != 0) {
+                if (automat.checked) {
 
+                    currentlySelectedCanvas.sort(function (a, b) { return parseFloat(b.getAttribute("position") as string) - parseFloat(a.getAttribute("position") as string) });
 
-            // DO NAPRAWIENIA
-            if (automat.checked) {
-                currentlySelectedCanvas.sort((a, b) => +b.getAttribute("position")! - +a.getAttribute("position")!);
+                    let furthestCanvas = currentlySelectedCanvas[0] as MapMakerCanvas
 
-                let useInAutomat = currentlySelectedCanvas[0]
+                    clearSelected()
 
-                let nextPosition = +useInAutomat.getAttribute("position")! + 1
+                    if (furthestCanvas.nextSibling) {
+                        currentlySelectedCanvas.push(furthestCanvas.nextSibling as MapMakerCanvas)
+                    }
 
-                let MapMakerCanvases = Array.from(document.querySelectorAll('#canvasID'));
-                console.log(MapMakerCanvases);
-
-
-                let automatCanvas = MapMakerCanvases?.find((canvas) => +canvas.getAttribute("position")! == nextPosition);
-
-                console.log(automatCanvas);
-
-
-                clearSelected()
-
-                // currentlySelectedCanvas.push(automatCanvas)
-
-
-
-
-            } else {
-                clearSelected()
+                } else {
+                    clearSelected()
+                }
             }
         })
     }
