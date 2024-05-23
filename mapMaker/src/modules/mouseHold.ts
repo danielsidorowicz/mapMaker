@@ -19,8 +19,8 @@ export default class MouseHold {
     private startHoldFunction = (e: MouseEvent) => {
         this.holding = true
 
-        this.divStartPositionX = e.clientX
-        this.divStartPositionY = e.clientY
+        this.divStartPositionX = e.pageX
+        this.divStartPositionY = e.pageY
 
         this.timeOutForHold = setTimeout(() => {
             if (this.holding) {
@@ -47,9 +47,6 @@ export default class MouseHold {
         selectBoxDiv.classList.add("selectBoxDiv")
         document.body.append(selectBoxDiv)
 
-        // selectBoxDiv.style.left = this.divStartPositionX.toString()
-        // selectBoxDiv.style.top = this.divStartPositionY.toString()
-
         selectBoxDiv.style.left = `${this.divStartPositionX}px`
         selectBoxDiv.style.top = `${this.divStartPositionY}px`
 
@@ -59,18 +56,25 @@ export default class MouseHold {
     private mouseMoveFunction = (e: MouseEvent) => {
         let selectBoxDiv = document.getElementById("selectBoxDiv") as HTMLDivElement
 
-
-        let divWidth = e.clientX - this.divStartPositionX
         let divHeight = e.clientY - this.divStartPositionY
+        let divWidth = e.clientX - this.divStartPositionX
 
+        if (divWidth < 0) {
+            selectBoxDiv.style.left = `${this.divStartPositionX + divWidth}px`;
+            divWidth = -divWidth;
+        } else {
+            selectBoxDiv.style.left = `${this.divStartPositionX}px`;
+        }
 
+        if (divHeight < 0) {
+            selectBoxDiv.style.top = `${this.divStartPositionY + divHeight}px`;
+            divHeight = -divHeight;
+        } else {
+            selectBoxDiv.style.top = `${this.divStartPositionY}px`;
+        }
 
-
-        selectBoxDiv.style.width = `${divWidth}px`
-        selectBoxDiv.style.height = `${divHeight}px`
-
-
-        console.log(divWidth, divHeight);
+        selectBoxDiv.style.width = `${divWidth}px`;
+        selectBoxDiv.style.height = `${divHeight}px`;
     }
 
 }

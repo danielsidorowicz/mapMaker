@@ -6,8 +6,8 @@ export default class Map {
     constructor() {
         const mapMaker = <HTMLDivElement>document.querySelector("#mapMaker")
         let m = 0
-        for (let i = 0; i < 48; i++) {
-            for (let j = 0; j < 48; j++) {
+        for (let i = 0; i < 42; i++) {
+            for (let j = 0; j < 42; j++) {
                 const canvas = <MapMakerCanvas>document.createElement("canvas")
                 canvas.width = 16;
                 canvas.height = 16;
