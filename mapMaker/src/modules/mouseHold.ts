@@ -1,3 +1,6 @@
+import { clearSelected, currentlySelectedCanvas } from "./data"
+import { MapMakerCanvas } from "./interfaces"
+
 export default class MouseHold {
     holding: Boolean
     mapDiv: HTMLDivElement
@@ -29,15 +32,74 @@ export default class MouseHold {
         }, 100)
     }
 
-    private stopHoldFunction = () => {
-        this.holding = false
+    private stopHoldFunction = (e: MouseEvent) => {
+
 
         this.mapDiv.removeEventListener("mousemove", this.mouseMoveFunction)
         clearTimeout(this.timeOutForHold)
 
+        let elements = document.querySelectorAll("#mapMaker *")
+
+        // let selectBox, selectBoxRectangle
+
         if (document.getElementById("selectBoxDiv")) {
-            document.getElementById("selectBoxDiv")!.remove()
+            let selectBox = document.getElementById("selectBoxDiv")
+            let selectBoxRectangle = selectBox?.getBoundingClientRect()
+            if (this.holding) {
+                if (e.ctrlKey || e.metaKey) {
+                    let checkIfAllInside = true
+                    let canvasesToDo: MapMakerCanvas[] = []
+
+                    elements.forEach(canvas => {
+                        let canvasRectangle = canvas.getBoundingClientRect()
+                        if (!(canvasRectangle.right < selectBoxRectangle!.left || canvasRectangle.left > selectBoxRectangle!.right || canvasRectangle.bottom < selectBoxRectangle!.top || canvasRectangle.top > selectBoxRectangle!.bottom)) {
+                            if (!currentlySelectedCanvas.includes(canvas as MapMakerCanvas)) {
+                                checkIfAllInside = false
+                            }
+                            canvasesToDo.push(canvas as MapMakerCanvas)
+                        }
+                    })
+
+                    if (checkIfAllInside) {
+                        for (let i = 0; i < canvasesToDo.length; i++) {
+                            const index = currentlySelectedCanvas.indexOf(canvasesToDo[i]);
+                            currentlySelectedCanvas.splice(index, 1);
+
+                            canvasesToDo[i].style.borderColor = ""
+                            canvasesToDo[i].style.backgroundColor = ""
+                        }
+                    } else {
+                        for (let i = 0; i < canvasesToDo.length; i++) {
+                            canvasesToDo[i].style.borderColor = "lightskyblue"
+                            canvasesToDo[i].style.backgroundColor = "gray"
+                            currentlySelectedCanvas.push(canvasesToDo[i])
+                        }
+                    }
+
+                } else {
+                    clearSelected()
+                    elements.forEach(canvas => {
+                        let canvasRectangle = canvas.getBoundingClientRect()
+                        if (!(canvasRectangle.right < selectBoxRectangle!.left || canvasRectangle.left > selectBoxRectangle!.right || canvasRectangle.bottom < selectBoxRectangle!.top || canvasRectangle.top > selectBoxRectangle!.bottom)) {
+                            if (!currentlySelectedCanvas.includes(canvas as MapMakerCanvas)) {
+                                let canvasAdd = canvas as MapMakerCanvas
+
+                                canvasAdd.style.borderColor = "lightskyblue"
+                                canvasAdd.style.backgroundColor = "gray"
+                                currentlySelectedCanvas.push(canvasAdd)
+                            }
+                        }
+                    })
+
+                }
+
+            }
+
+            if (selectBox) {
+                selectBox!.remove()
+            }
         }
+        this.holding = false
     }
 
     private holdFunction = () => {
