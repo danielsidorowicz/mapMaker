@@ -1,5 +1,12 @@
 interface MapMakerCanvas extends HTMLCanvasElement {
     position: string
+    imageData: ImageData
 }
 
-export type { MapMakerCanvas }
+interface historyInt {
+    action: string,
+    canvasSelected: MapMakerCanvas[],
+    canvasBoard: MapMakerCanvas[],
+}
+
+export type { MapMakerCanvas, historyInt }

@@ -1,5 +1,5 @@
-import { clearSelected, currentlySelectedCanvas } from "./data"
-import { MapMakerCanvas } from "./interfaces"
+import { clearSelected, currentlySelectedCanvas, undoRedoFunction } from "./data"
+import { MapMakerCanvas, historyInt } from "./interfaces"
 
 export default class MouseHold {
     holding: Boolean
@@ -20,32 +20,39 @@ export default class MouseHold {
     }
 
     private startHoldFunction = (e: MouseEvent) => {
-        this.holding = true
+        if (document.getElementById("contextMenu")?.style.display != "flex") {
+            this.holding = true
 
-        this.divStartPositionX = e.pageX
-        this.divStartPositionY = e.pageY
+            this.divStartPositionX = e.pageX
+            this.divStartPositionY = e.pageY
 
-        this.timeOutForHold = setTimeout(() => {
-            if (this.holding) {
-                this.holdFunction()
-            }
-        }, 100)
+            this.timeOutForHold = setTimeout(() => {
+                if (this.holding) {
+                    this.holdFunction()
+                }
+            }, 100)
+        }
     }
 
     private stopHoldFunction = (e: MouseEvent) => {
-
-
         this.mapDiv.removeEventListener("mousemove", this.mouseMoveFunction)
         clearTimeout(this.timeOutForHold)
 
         let elements = document.querySelectorAll("#mapMaker *")
 
-        // let selectBox, selectBoxRectangle
+
 
         if (document.getElementById("selectBoxDiv")) {
             let selectBox = document.getElementById("selectBoxDiv")
             let selectBoxRectangle = selectBox?.getBoundingClientRect()
             if (this.holding) {
+                let historyAction: historyInt = {
+                    action: "select",
+                    canvasSelected: currentlySelectedCanvas,
+                    canvasBoard: []
+                }
+
+                undoRedoFunction(historyAction)
                 if (e.ctrlKey || e.metaKey) {
                     let checkIfAllInside = true
                     let canvasesToDo: MapMakerCanvas[] = []
@@ -90,7 +97,6 @@ export default class MouseHold {
                             }
                         }
                     })
-
                 }
 
             }

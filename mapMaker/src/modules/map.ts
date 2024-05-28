@@ -1,6 +1,14 @@
-import { currentlySelectedCanvas, clearSelected } from "./data";
-import { MapMakerCanvas } from "./interfaces";
+import { currentlySelectedCanvas, clearSelected, undoRedoFunction } from "./data";
+import { MapMakerCanvas, historyInt } from "./interfaces";
 import MouseHold from "./mouseHold";
+
+function hideContextMenu() {
+    let contextMenuOwn = document.getElementById("contextMenu") as HTMLDivElement
+
+    contextMenuOwn.style.display = "none"
+
+    document.body.removeEventListener("click", hideContextMenu)
+}
 
 export default class Map {
     constructor() {
@@ -21,19 +29,35 @@ export default class Map {
         }
 
         new MouseHold(mapMaker)
+
+        mapMaker.addEventListener("contextmenu", this.contextMenuUp)
+
+        // let historyAction: historyInt = {
+        //     action: "original",
+        //     canvasBoard: [],
+        //     canvasSelected: []
+        // }
+
+        // undoRedoFunction(historyAction)
     }
 
     private canvasClick(canvasElement: MapMakerCanvas) {
         canvasElement.addEventListener("click", function (e) {
-            if (e.ctrlKey || e.metaKey) {
+            let historyAction: historyInt = {
+                action: "select",
+                canvasSelected: currentlySelectedCanvas,
+                canvasBoard: []
+            }
 
-            } else {
+            undoRedoFunction(historyAction)
+
+
+            if (!(e.ctrlKey || e.metaKey)) {
+
                 clearSelected()
             }
-            let canvas = e.target as MapMakerCanvas
 
-            canvas.style.borderColor = "lightskyblue"
-            canvas.style.backgroundColor = "gray"
+            let canvas = e.target as MapMakerCanvas
 
             if (currentlySelectedCanvas.includes(canvas)) {
                 const index = currentlySelectedCanvas.indexOf(canvas);
@@ -41,13 +65,31 @@ export default class Map {
 
                 canvas.style.borderColor = ""
                 canvas.style.backgroundColor = ""
+
             } else {
+                canvas.style.borderColor = "lightskyblue"
+                canvas.style.backgroundColor = "gray"
                 currentlySelectedCanvas.push(canvas)
+
             }
 
 
-            console.log(currentlySelectedCanvas);
+
+            // console.log(currentlySelectedCanvas);
 
         })
+    }
+
+    private contextMenuUp(e: MouseEvent) {
+        e.preventDefault()
+
+        let contextMenuOwn = document.getElementById("contextMenu") as HTMLDivElement
+
+        contextMenuOwn.style.display = "flex"
+        contextMenuOwn.style.left = `${e.clientX}px`
+        contextMenuOwn.style.top = `${e.clientY}px`
+
+        document.body.addEventListener("click", hideContextMenu)
+
     }
 }

@@ -1,32 +1,94 @@
 import '../style/style.css'
 import Options from './options'
 import Map from './map'
-import { currentlySelectedCanvas, clearSelected } from './data'
+// import { currentlySelectedCanvas, clearSelected } from './data'
+import ContextMenu from './contextMenu'
 // import MouseSelect from './mouseSelect'
 
 // const mapMaker = <HTMLElement>document.querySelector("#mapMaker")
-window.addEventListener('keydown', function(e) {
-    let key = e.key
 
-    if(key == "Delete"){
-        for (let i = 0; i < currentlySelectedCanvas.length; i++) {
-            const context = currentlySelectedCanvas[i].getContext('2d');
-            context!.clearRect(0, 0, currentlySelectedCanvas[i].width, currentlySelectedCanvas[i].height);
-        }
-        clearSelected()
-    }
-})
 
 
 new Options()
 new Map()
+let contextMenu = new ContextMenu()
 
+let controlKey = false
+let lKey = false
+let sKey = false
+let zKey = false
+let yKey = false
 
-// for (let i = 0; i < mapMaker.children.length; i++) {
-    
+window.addEventListener('keydown', function (e) {
+    e.preventDefault()
+    let key: String = e.code
 
-// }
-// (document.querySelector('.app') as HTMLElement).addEventListener("mousedown", function () {
-//     console.log("click");
+    console.log(key);
 
-// })
+    if (key == "Delete") {
+        contextMenu.delButtonFunction()
+    }
+
+    if (key == "ControlLeft") {
+        controlKey = true
+    }
+
+    if (key == "KeyS") {
+        sKey = true
+    }
+
+    if (key == "KeyL") {
+        lKey = true
+    }
+
+    if (key == "KeyZ") {
+        zKey = true
+    }
+
+    if (key == "KeyY") {
+        yKey = true
+    }
+
+    if (controlKey && sKey) {
+        contextMenu.saveButtonFunction()
+        // controlKey = false
+        sKey = false
+    } else if (controlKey && lKey) {
+        contextMenu.clickLoadButton()
+        // controlKey = false
+        lKey = false
+    } else if (controlKey && zKey) {
+        contextMenu.undoButtonFunction()
+        // controlKey = false
+        zKey = false
+    } else if (controlKey && yKey) {
+        contextMenu.redoButtonFunction()
+        // controlKey = false
+        yKey = false
+    }
+
+})
+
+window.addEventListener('keyup', (e) => {
+    let key: String = e.code
+
+    if (key == "ControlLeft") {
+        controlKey = false
+    }
+
+    if (key == "KeyS") {
+        sKey = false
+    }
+
+    if (key == "KeyL") {
+        lKey = false
+    }
+
+    if (key == "KeyZ") {
+        zKey = false
+    }
+
+    if (key == "KeyY") {
+        yKey = false
+    }
+});

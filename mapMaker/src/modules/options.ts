@@ -1,5 +1,5 @@
-import { currentlySelectedCanvas, clearSelected } from "./data";
-import { MapMakerCanvas } from "./interfaces";
+import { currentlySelectedCanvas, clearSelected, undoRedoFunction } from "./data";
+import { MapMakerCanvas, historyInt } from "./interfaces";
 
 export default class Options {
     constructor() {
@@ -27,11 +27,30 @@ export default class Options {
 
     private canvasClick(canvasElement: HTMLCanvasElement) {
         canvasElement.addEventListener("click", function (e) {
+
+            let mapMakerChildren = document.getElementById("mapMaker")?.children
+            let board: MapMakerCanvas[] = []
+
+            for (let i = 0; i < mapMakerChildren?.length!; i++) {
+                let canvas = mapMakerChildren![i] as MapMakerCanvas
+                board.push(canvas)
+            }
+
+            let historyAction: historyInt = {
+                action: "board",
+                canvasSelected: currentlySelectedCanvas,
+                canvasBoard: board
+            }
+
+            undoRedoFunction(historyAction)
+
+
             for (let i = 0; i < currentlySelectedCanvas.length; i++) {
                 let chosenCanvas = e.target as HTMLCanvasElement
                 let ctx = currentlySelectedCanvas[i].getContext("2d")
                 ctx?.drawImage(chosenCanvas, 0, 0)
             }
+
 
 
             let automat = document.getElementById("automat") as HTMLInputElement
