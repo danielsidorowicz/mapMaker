@@ -14,6 +14,7 @@ new Map()
 let contextMenu = new ContextMenu()
 
 let controlKey = false
+let metaKey = false
 let lKey = false
 let sKey = false
 let zKey = false
@@ -33,6 +34,10 @@ window.addEventListener('keydown', function (e) {
         controlKey = true
     }
 
+    if (key == "MetaKey") {
+        metaKey = true
+    }
+
     if (key == "KeyS") {
         sKey = true
     }
@@ -49,19 +54,19 @@ window.addEventListener('keydown', function (e) {
         yKey = true
     }
 
-    if (controlKey && sKey) {
+    if (controlKey && sKey || metaKey && sKey) {
         contextMenu.saveButtonFunction()
         // controlKey = false
         sKey = false
-    } else if (controlKey && lKey) {
+    } else if (controlKey && lKey || metaKey && lKey) {
         contextMenu.clickLoadButton()
         // controlKey = false
         lKey = false
-    } else if (controlKey && zKey) {
+    } else if (controlKey && zKey || metaKey && zKey) {
         contextMenu.undoButtonFunction()
         // controlKey = false
         zKey = false
-    } else if (controlKey && yKey) {
+    } else if (controlKey && yKey || metaKey && yKey) {
         contextMenu.redoButtonFunction()
         // controlKey = false
         yKey = false
@@ -74,6 +79,10 @@ window.addEventListener('keyup', (e) => {
 
     if (key == "ControlLeft") {
         controlKey = false
+    }
+
+    if (key == "MetaKey") {
+        metaKey = false
     }
 
     if (key == "KeyS") {

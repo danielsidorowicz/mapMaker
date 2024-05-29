@@ -9,4 +9,9 @@ interface historyInt {
     canvasBoard: MapMakerCanvas[],
 }
 
-export type { MapMakerCanvas, historyInt }
+interface jsonSave {
+    id: number,
+    url: string
+}
+
+export type { MapMakerCanvas, historyInt, jsonSave }

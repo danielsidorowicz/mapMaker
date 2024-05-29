@@ -1,5 +1,5 @@
-import { currentlySelectedCanvas, clearSelected, undoRedoFunction, history, undoRedoMap } from "./data";
-import { MapMakerCanvas, historyInt } from "./interfaces"
+import { currentlySelectedCanvas, clearSelected, undoRedoFunction, undoRedoMap } from "./data";
+import { MapMakerCanvas, historyInt, jsonSave } from "./interfaces"
 
 
 
@@ -65,7 +65,7 @@ export default class ContextMenu {
     public saveButtonFunction = () => {
         let allCanvases = document.getElementById("mapMaker")!.children
 
-        let jsonToSave: { id: number, url: string }[] = []
+        let jsonToSave: jsonSave[] = []
 
         for (let i = 0; i < allCanvases!.length; i++) {
             let canvas = allCanvases[i] as MapMakerCanvas
@@ -97,6 +97,22 @@ export default class ContextMenu {
 
     public loadButtonFunction = (e: Event) => {
 
+        let mapMakerChildren = document.getElementById("mapMaker")?.children
+        let board: MapMakerCanvas[] = []
+
+        for (let i = 0; i < mapMakerChildren?.length!; i++) {
+            let canvas = mapMakerChildren![i] as MapMakerCanvas
+            board.push(canvas)
+        }
+
+        let historyAction: historyInt = {
+            action: "board",
+            canvasSelected: currentlySelectedCanvas,
+            canvasBoard: board
+        }
+
+        undoRedoFunction(historyAction)
+
         const eventTarget = e.target as HTMLInputElement
         const file = eventTarget.files?.[0]
         // console.log(file);
@@ -115,7 +131,7 @@ export default class ContextMenu {
 
                     for (let i = 0; i < mapMakerChildren?.length!; i++) {
                         let canvas = mapMakerChildren![i] as MapMakerCanvas
-                        let context = canvas.getContext("2d")
+                        let context = canvas.getContext("2d", { willReadFrequently: true })
 
                         const img = new Image()
                         img.src = jsonData[i].url

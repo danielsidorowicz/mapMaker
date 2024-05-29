@@ -68,50 +68,53 @@ function clearSelected(): void {
 }
 
 function undoRedoMap(value: number) {
-    if (historyCounter != 0) {
+    if (historyCounter + value != -1 && historyCounter + value != history.length) {
         historyCounter = historyCounter + value;
+    }
 
-        let goBack = history[historyCounter] as historyInt;
+    console.log(historyCounter);
 
-        if (goBack.action == "board") {
-            let mapMakerChildren = document.getElementById("mapMaker")?.children;
+    let goBack = history[historyCounter] as historyInt;
 
-            for (let i = 0; i < mapMakerChildren?.length!; i++) {
-                let canvasMap = mapMakerChildren![i] as MapMakerCanvas;
-                let contextMap = canvasMap.getContext("2d");
+    if (goBack.action == "board") {
+        let mapMakerChildren = document.getElementById("mapMaker")?.children;
 
-                let historyMapData = goBack.canvasBoard[i].imageData;
+        for (let i = 0; i < mapMakerChildren?.length!; i++) {
+            let canvasMap = mapMakerChildren![i] as MapMakerCanvas;
+            let contextMap = canvasMap.getContext("2d");
 
-                if (contextMap && historyMapData) {
-                    // Clear the current canvas
-                    contextMap.clearRect(0, 0, canvasMap.width, canvasMap.height);
+            let historyMapData = goBack.canvasBoard[i].imageData;
 
-                    // Restore the saved state from the history imageData
-                    contextMap.putImageData(historyMapData, 0, 0);
-                } else {
-                    console.error("Context or ImageData is null for canvas:", i);
-                }
-            }
+            if (contextMap && historyMapData) {
+                // Clear the current canvas
+                contextMap.clearRect(0, 0, canvasMap.width, canvasMap.height);
 
-            clearSelected();
-
-            // if (value == -1) {
-            for (let i = 0; i < goBack.canvasSelected.length; i++) {
-                goBack.canvasSelected[i].style.borderColor = "lightskyblue";
-                goBack.canvasSelected[i].style.backgroundColor = "gray";
-                currentlySelectedCanvas.push(goBack.canvasSelected[i]);
-            }
-            // }
-        } else if (goBack.action == "select") {
-            clearSelected();
-
-            for (let i = 0; i < goBack.canvasSelected.length; i++) {
-                goBack.canvasSelected[i].style.borderColor = "lightskyblue";
-                goBack.canvasSelected[i].style.backgroundColor = "gray";
-                currentlySelectedCanvas.push(goBack.canvasSelected[i]);
+                // Restore the saved state from the history imageData
+                contextMap.putImageData(historyMapData, 0, 0);
+            } else {
+                console.error("Context or ImageData is null for canvas:", i);
             }
         }
+
+        clearSelected();
+
+        // if (value == -1) {
+        for (let i = 0; i < goBack.canvasSelected.length; i++) {
+            goBack.canvasSelected[i].style.borderColor = "lightskyblue";
+            goBack.canvasSelected[i].style.backgroundColor = "gray";
+            currentlySelectedCanvas.push(goBack.canvasSelected[i]);
+        }
+        // }
+    } else if (goBack.action == "select") {
+        clearSelected();
+
+        for (let i = 0; i < goBack.canvasSelected.length; i++) {
+            goBack.canvasSelected[i].style.borderColor = "lightskyblue";
+            goBack.canvasSelected[i].style.backgroundColor = "gray";
+            currentlySelectedCanvas.push(goBack.canvasSelected[i]);
+        }
     }
+
 }
 
 

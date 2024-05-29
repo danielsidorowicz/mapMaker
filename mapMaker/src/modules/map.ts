@@ -31,14 +31,6 @@ export default class Map {
         new MouseHold(mapMaker)
 
         mapMaker.addEventListener("contextmenu", this.contextMenuUp)
-
-        // let historyAction: historyInt = {
-        //     action: "original",
-        //     canvasBoard: [],
-        //     canvasSelected: []
-        // }
-
-        // undoRedoFunction(historyAction)
     }
 
     private canvasClick(canvasElement: MapMakerCanvas) {
